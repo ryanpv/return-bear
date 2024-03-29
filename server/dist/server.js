@@ -4,7 +4,7 @@ import "dotenv/config.js";
 // CONTROLLER
 import returnBear from './controllers/return-bear.js';
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 8080;
 app.use(cors({
     origin: [
         'http://localhost:3000',
