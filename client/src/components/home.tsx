@@ -136,25 +136,28 @@ export default function Home() {
         >Submit</button>
       </form>
 
-      <h2>RESULTS:</h2>
-      <h3 data-testid="errMsg">{ error !== '' ? `***${ error }***` : null }</h3>
+      <div>
+        <h2>RESULTS:</h2>
+        <h3 data-testid="errMsg">{ error !== '' ? `***${ error }***` : null }</h3>
 
-      <Linkify>
-        { textMsg.message }
-      </Linkify>
+        <Linkify>
+          { textMsg.message }
+        </Linkify>
 
-      <div>
-        <p data-testid='prefix'><strong>PREFIX: </strong>{ phoneData.prefix }</p>
+        <div>
+          <p data-testid='prefix'><strong>PREFIX: </strong>{ phoneData.prefix }</p>
+        </div>
+        <div>
+          <p data-testid='operator'><strong>OPERATOR: </strong>{ phoneData.operator }</p>
+        </div>
+        <div>
+          <p data-testid="country"><strong>COUNTRY: </strong>{ phoneData.country }</p>
+        </div>
+        <div>
+          <p data-testid='region'><strong>REGION: </strong>{ phoneData.region }</p>
+        </div>
       </div>
-      <div>
-        <p data-testid='operator'><strong>OPERATOR: </strong>{ phoneData.operator }</p>
-      </div>
-      <div>
-        <p data-testid="country"><strong>COUNTRY: </strong>{ phoneData.country }</p>
-      </div>
-      <div>
-        <p data-testid='region'><strong>REGION: </strong>{ phoneData.region }</p>
-      </div>
+
     </div>
   )
 }
