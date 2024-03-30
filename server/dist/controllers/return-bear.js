@@ -28,6 +28,32 @@ const returnBear = async (req, res) => {
             region: null
         };
         while (startIndex <= endIndex) {
+            // ******************* INITIAL VALUE SETTING (longestPrefix.prefix === null) *******************
+            // Check if prefix values for startIndex and endIndex are same during same iterations
+            // Covers condition where result[startIndex].prefix === result[endIndex].prefix on very first iteration
+            if (result[startIndex].prefix === result[endIndex].prefix
+                && phone_number.indexOf(result[startIndex].prefix.toString()) === 0
+                && longestPrefix.prefix === null) {
+                longestPrefix = {
+                    prefix: result[startIndex].prefix,
+                    operator: [result[startIndex].operator, result[endIndex].operator].join(),
+                    country_code: result[startIndex].country_code,
+                    country: [result[startIndex].country, result[endIndex].country].join(),
+                    region: [result[startIndex].region, result[endIndex].region].join()
+                };
+            }
+            // Checks if result[startIndex].prefix matches longestPrefix.prefix and result[startIndex].prefix !== result[endIndex].prefix
+            if (phone_number.indexOf(result[startIndex].prefix.toString()) === 0
+                && longestPrefix.prefix === null) {
+                longestPrefix = result[startIndex];
+                console.log("start index");
+            }
+            // Initial prefix match for result[endIndex]
+            if (phone_number.indexOf(result[endIndex].prefix.toString()) === 0
+                && longestPrefix.prefix === null) {
+                longestPrefix = result[endIndex];
+                console.log("end index");
+            }
             // ******************* COMPARE CURRENT PREFIX WITH DATAJSON INTERATION PREFIX *******************
             // if statements for duplicate prefixes found between result[startIndex] and result[endIndex] when a longestPrefix.prefix already exists 
             if (longestPrefix.prefix !== null
@@ -47,7 +73,7 @@ const returnBear = async (req, res) => {
             }
             // ******************* CHECKING LONGEST PREFIX *******************
             // if value for longestPrefix.prefix exists, compare its length with the length of result[startIndex]. Return the longer value
-            if (longestPrefix.prefix !== null
+            if (longestPrefix.prefix !== null // must be checked first otherwise an error will be thrown trying to access longestPrefix.prefix
                 && longestPrefix.prefix.toString().length < result[startIndex].prefix.toString().length
                 && phone_number.indexOf(result[startIndex].prefix.toString()) === 0) {
                 longestPrefix = result[startIndex];
@@ -56,31 +82,6 @@ const returnBear = async (req, res) => {
             if (longestPrefix.prefix !== null
                 && longestPrefix.prefix.toString().length < result[endIndex].prefix.toString().length
                 && phone_number.indexOf(result[endIndex].prefix.toString()) === 0) {
-                longestPrefix = result[endIndex];
-            }
-            // ******************* INITIAL VALUE SETTING (longestPrefix.prefix === null) *******************
-            // Check if prefix values for startIndex and endIndex are same during same iterations
-            // Covers condition where result[startIndex].prefix === result[endIndex].prefix on very first iteration
-            // Must run be before if statements that look for null value, but result[start].prefix !== result[endIndex].prefix otherwise that if statement overwrites values
-            if (result[startIndex].prefix === result[endIndex].prefix
-                && phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-                && longestPrefix.prefix === null) {
-                longestPrefix = {
-                    prefix: result[startIndex].prefix,
-                    operator: [result[startIndex].operator, result[endIndex].operator].join(),
-                    country_code: result[startIndex].country_code,
-                    country: [result[startIndex].country, result[endIndex].country].join(),
-                    region: [result[startIndex].region, result[endIndex].region].join()
-                };
-            }
-            // Checks if result[startIndex].prefix matches longestPrefix.prefix and result[startIndex].prefix !== result[endIndex].prefix
-            if (phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-                && longestPrefix.prefix === null) {
-                longestPrefix = result[startIndex];
-            }
-            // Initial prefix match for result[endIndex]
-            if (phone_number.indexOf(result[endIndex].prefix.toString()) === 0
-                && longestPrefix.prefix === null) {
                 longestPrefix = result[endIndex];
             }
             startIndex++;
