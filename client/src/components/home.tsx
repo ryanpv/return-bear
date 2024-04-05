@@ -148,6 +148,7 @@ export default function Home() {
               <div className='pt-4'>
                 <button
                   type='submit'
+                  aria-label='submitBtn'
                   className='flex w-full justify-center rounded text-gray-700 ring-2 ring-gray-700 py-2.5 px-3.5 font-semibold'>
                     Submit
                   </button>

@@ -30,7 +30,7 @@ describe('Home page', () => {
 
     const phoneInput = screen.getByTestId('phoneNumber');
     // const messageInput = screen.getByRole('textbox', { name: 'messageBox' });
-    const submitBtn = screen.getByRole('button', { name: 'submit' });
+    const submitBtn = screen.getByRole('button', { name: 'submitBtn' });
 
     fireEvent.change(phoneInput, { target: { value: '1902' }})
 
@@ -54,7 +54,7 @@ describe('Home page', () => {
 
     render(<Home />);
 
-    const submitBtn = screen.getByRole('button', { name: 'submit' });
+    const submitBtn = screen.getByRole('button', { name: 'submitBtn' });
     fireEvent.click(submitBtn);
 
     const error = screen.getByTestId("errMsg");
