@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import * as linkify from 'linkifyjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,19 +10,15 @@ const returnBear = async(req: Request, res: Response) => {
   try {
     const { phone_number } = req.body;
     const checkRegex = /^\d+$/; // RegEx to check if string contains only numbers
-console.log('req: ', req.body);
 
     if (!checkRegex.test(phone_number) || phone_number === "") {
       res.status(400).json({ errMsg: "INVALID input. Submit only numbers without spaces" });
       return;
     }
-
-    // const linkifiedText = linkify.find(message).map(link => link.href).join(' ');
-    // console.log("linkified: ", linkifiedText);
     
     const filePath = path.join(__dirname, '..', 'data.json');
     const getData = await fs.readFile(filePath, 'utf8');
-    const result = JSON.parse(getData);
+    const dataSet = JSON.parse(getData);
 
     type PhoneData = {
       prefix: number | null,
@@ -33,8 +28,8 @@ console.log('req: ', req.body);
       region: null | string
     };
 
-    let startIndex = 0;
-    let endIndex = result.length - 1;
+    let leftIndex = 0;
+    let rightIndex = dataSet.length - 1;
     let longestPrefix: PhoneData = {
       prefix: null,
       operator: null,
@@ -42,87 +37,65 @@ console.log('req: ', req.body);
       country: null,
       region: null
     };
+    
+    while (leftIndex <= rightIndex) {
+      const noPrefixStored = longestPrefix.prefix === null;
+      // const prefixStored = longestPrefix.prefix !== null;
+      const leftPrefixValue = dataSet[leftIndex].prefix;
+      const rightPrefixValue = dataSet[rightIndex].prefix;
+      const phoneStartsWithLeft = phone_number.indexOf(dataSet[leftIndex].prefix.toString()) === 0;
+      const phoneStartsWithRight = phone_number.indexOf(dataSet[rightIndex].prefix.toString()) === 0;
 
-    while (startIndex <= endIndex) {
-// ******************* INITIAL VALUE SETTING (longestPrefix.prefix === null) *******************
-      // Check if prefix values for startIndex and endIndex are same during same iterations
-      // Covers condition where result[startIndex].prefix === result[endIndex].prefix on very first iteration
-      if (
-        result[startIndex].prefix === result[endIndex].prefix
-        && phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-        && longestPrefix.prefix === null
-      ) {
-        longestPrefix = {
-          prefix: result[startIndex].prefix,
-          operator: [result[startIndex].operator, result[endIndex].operator].join(),
-          country_code: result[startIndex].country_code,
-          country: [result[startIndex].country, result[endIndex].country].join(),
-          region: [result[startIndex].region, result[endIndex].region].join()
-        }        
-      }
-
-      // Checks if result[startIndex].prefix matches longestPrefix.prefix and result[startIndex].prefix !== result[endIndex].prefix
-      if (
-        phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-        && longestPrefix.prefix === null
+      if (noPrefixStored) { // Find the initial prefix match
+        if ( // Store value of both pointers
+          leftPrefixValue === rightPrefixValue
+          && phoneStartsWithLeft
         ) {
-        longestPrefix = result[startIndex]
-        console.log("start index")
-      }
-
-      // Initial prefix match for result[endIndex]
-      if (
-        phone_number.indexOf(result[endIndex].prefix.toString()) === 0
-        && longestPrefix.prefix === null
-        ) {
-        longestPrefix = result[endIndex]
-        console.log("end index")
-      }
-
-// ******************* COMPARE CURRENT PREFIX WITH DATAJSON INTERATION PREFIX *******************
-      // if statements for duplicate prefixes found between result[startIndex] and result[endIndex] when a longestPrefix.prefix already exists 
-      if (
-        longestPrefix.prefix !== null
-        && phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-        && longestPrefix.prefix === result[startIndex].prefix
-        ) {
-          longestPrefix.country = [result[startIndex].country, longestPrefix.country].join();
-          longestPrefix.operator = [result[startIndex].operator, longestPrefix.operator].join();
-          longestPrefix.region = [result[startIndex].region, longestPrefix.region].join();
+          longestPrefix = {
+            prefix: dataSet[leftIndex].prefix,
+            operator: [dataSet[leftIndex].operator, dataSet[rightIndex].operator].join(),
+            country_code: dataSet[leftIndex].country_code,
+            country: [dataSet[leftIndex].country, dataSet[rightIndex].country].join(),
+            region: [dataSet[leftIndex].region, dataSet[rightIndex].region].join()
+          };
+        } else if (phoneStartsWithLeft) { // Store value of left pointer
+          longestPrefix = dataSet[leftIndex]
+        } else if (phoneStartsWithRight) { // Store value of right pointer
+          longestPrefix = dataSet[rightIndex]
         }
-        
-      // same if statement, but for [endIndex]
-      if (
-        longestPrefix.prefix !== null
-        && phone_number.indexOf(result[endIndex].prefix.toString()) === 0
-        && longestPrefix.prefix === result[endIndex].prefix
+      } else { // Update stored prefix with longest value
+        if ( // Add value of left pointer to stored value
+            phoneStartsWithLeft
+            && longestPrefix.prefix === leftPrefixValue
+          ) {
+            longestPrefix.country = [dataSet[leftIndex].country, longestPrefix.country].join();
+            longestPrefix.operator = [dataSet[leftIndex].operator, longestPrefix.operator].join();
+            longestPrefix.region = [dataSet[leftIndex].region, longestPrefix.region].join();
+          } else if (
+            phoneStartsWithLeft // Store value of left pointer
+            && longestPrefix.prefix.toString().length < leftPrefixValue.toString().length
+          ) {
+            longestPrefix = dataSet[leftIndex]
+          }
+          
+        if ( // Add value of right pointer to stored vlaue
+          phoneStartsWithRight
+          && longestPrefix.prefix === rightPrefixValue
         ) {
-          longestPrefix.country = [result[endIndex].country, longestPrefix.country].join();
-          longestPrefix.operator = [result[endIndex].operator, longestPrefix.operator].join();
-          longestPrefix.region = [result[endIndex].region, longestPrefix.region].join();
-        }      
+          longestPrefix.country = [dataSet[rightIndex].country, longestPrefix.country].join();
+          longestPrefix.operator = [dataSet[rightIndex].operator, longestPrefix.operator].join();
+          longestPrefix.region = [dataSet[rightIndex].region, longestPrefix.region].join();
+        } else if ( // Store value of right pointer
+          phoneStartsWithRight
+          && longestPrefix.prefix.toString().length < rightPrefixValue.toString().length
+        ) {
+          longestPrefix = dataSet[rightIndex];
+        }
+  
+      };
 
-// ******************* CHECKING LONGEST PREFIX *******************
-      // if value for longestPrefix.prefix exists, compare its length with the length of result[startIndex]. Return the longer value
-      if (
-        longestPrefix.prefix !== null // must be checked first otherwise an error will be thrown trying to access longestPrefix.prefix
-        && longestPrefix.prefix.toString().length < result[startIndex].prefix.toString().length 
-        && phone_number.indexOf(result[startIndex].prefix.toString()) === 0
-        ) {
-        longestPrefix = result[startIndex];
-      }
-
-      // same if statement for [endIndex]
-      if (
-        longestPrefix.prefix !== null
-        && longestPrefix.prefix.toString().length < result[endIndex].prefix.toString().length 
-        && phone_number.indexOf(result[endIndex].prefix.toString()) === 0
-        ) {
-        longestPrefix = result[endIndex];
-      }
-             
-      startIndex++
-      endIndex--
+      leftIndex++
+      rightIndex--
     };
 
     res.status(200).json(longestPrefix);
