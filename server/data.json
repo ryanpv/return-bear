@@ -1,0 +1,310 @@
+[
+    {
+        "prefix": 1,
+        "operator": null,
+        "country_code": 1,
+        "country": "USA",
+        "region": null
+    },
+    {
+        "prefix": 1,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": null
+    },
+    {
+        "prefix": 1204,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Manitoba"
+    },
+    {
+        "prefix": 1226,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1236,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "British Columbia"
+    },
+    {
+        "prefix": 1249,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1250,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "British Columbia"
+    },
+    {
+        "prefix": 1289,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1306,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Saskatchewan"
+    },
+    {
+        "prefix": 1343,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1365,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1403,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Alberta"
+    },
+    {
+        "prefix": 1416,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1418,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1431,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Manitoba"
+    },
+    {
+        "prefix": 1437,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1437329,
+        "operator": "Lucky Mobile",
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 143732,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1438,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1450,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1506,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "New Brunswick"
+    },
+    {
+        "prefix": 1514,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1519,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1579,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1581,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1587,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Alberta"
+    },
+    {
+        "prefix": 1604,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "British Columbia"
+    },
+    {
+        "prefix": 1613,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1639,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Saskatchewan"
+    },
+    {
+        "prefix": 1647,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1647993,
+        "operator": "Telus",
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1705,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1709,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Newfoundland and Labrador"
+    },
+    {
+        "prefix": 1778,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "British Columbia"
+    },
+    {
+        "prefix": 1780,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Alberta"
+    },
+    {
+        "prefix": 1807,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    },
+    {
+        "prefix": 1819,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1867,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Yukon Territory"
+    },
+    {
+        "prefix": 1867,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Nunavut"
+    },
+    {
+        "prefix": 1867,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Northwest Territories"
+    },
+    {
+        "prefix": 1873,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Québec"
+    },
+    {
+        "prefix": 1902,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Nova Scotia"
+    },
+    {
+        "prefix": 1902,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Prince Edward Island"
+    },
+    {
+        "prefix": 1905,
+        "operator": null,
+        "country_code": 1,
+        "country": "Canada",
+        "region": "Ontario"
+    }
+]

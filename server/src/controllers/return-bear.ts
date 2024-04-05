@@ -16,7 +16,7 @@ const returnBear = async(req: Request, res: Response) => {
       return;
     }
     
-    const filePath = path.join(__dirname, '..', 'data.json');
+    const filePath = path.join(__dirname, '../..', 'data.json');
     const getData = await fs.readFile(filePath, 'utf8');
     const dataSet = JSON.parse(getData);
 

@@ -20,6 +20,7 @@ export default function Home() {
   };
 
   const [phoneNumber, setFormData] = React.useState<PhoneNumber>({ phone_number: "", message: "" });
+  const [pending, setPending] = React.useState(false);
   const [textMsg, setTextMsg] = React.useState<TextMessage>({ message: "" });
   const [phoneData, setPhoneData] = React.useState<PhoneData>({
     prefix: 0,
@@ -56,6 +57,7 @@ export default function Home() {
     event.preventDefault();
 
     try {
+      setPending(true);
       const checkPhone = await fetch('http://localhost:3003/phone/data', {
         method: "POST",
         headers: {
@@ -79,18 +81,19 @@ export default function Home() {
         for (let [key] of Object.entries(result)) {
           if (typeof result[key] === 'string') {
             const uniqueValue = [...new Set(result[key].split(',').map((item: string) => item.trim()).filter((item: string) => item !== ''))];
-            // result[key] = result[key].replace(/^[\s,]+|[\s,]+$/g, '');
-            result[key] = uniqueValue.join()
+
+            result[key] = uniqueValue.join();
           }
 
         }
         setPhoneData(result);
         setError("");
       }
-      console.log("result: ", result)
     } catch (err) {
       console.log('error with form submission: ', err);
       setError("Error with form submission")
+    } finally {
+      setPending(false);
     }
   };
 
@@ -181,18 +184,23 @@ export default function Home() {
         </div>
 
 
-        <div>
-          <p data-testid='prefix'><strong>PREFIX: </strong>{ phoneData.prefix }</p>
-        </div>
-        <div>
-          <p data-testid='operator'><strong>OPERATOR: </strong>{ phoneData.operator }</p>
-        </div>
-        <div>
-          <p data-testid="country"><strong>COUNTRY: </strong>{ phoneData.country }</p>
-        </div>
-        <div>
-          <p data-testid='region'><strong>REGION: </strong>{ phoneData.region }</p>
-        </div>
+        { pending ? <h1>Pending results...</h1> 
+        : 
+          <>
+            <div>
+              <p data-testid='prefix'><strong>PREFIX: </strong>{ phoneData.prefix }</p>
+            </div>
+            <div>
+              <p data-testid='operator'><strong>OPERATOR: </strong>{ phoneData.operator }</p>
+            </div>
+            <div>
+              <p data-testid="country"><strong>COUNTRY: </strong>{ phoneData.country }</p>
+            </div>
+            <div>
+              <p data-testid='region'><strong>REGION: </strong>{ phoneData.region }</p>
+            </div>
+          </>
+        }
       </div>
 
     </div>
