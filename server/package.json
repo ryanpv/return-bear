@@ -7,7 +7,7 @@
   "scripts": {
     "test": "NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest",
     "jester": "jest --watchAll",
-    "dev": "concurrently -k \"tsc -p ../server -w\" \"nodemon\""
+    "dev": "PORT=3003 concurrently -k \"tsc -p ../server -w\" \"nodemon\""
   },
   "keywords": [],
   "author": "",
