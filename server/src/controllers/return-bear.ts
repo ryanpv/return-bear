@@ -40,7 +40,6 @@ const returnBear = async(req: Request, res: Response) => {
     
     while (leftIndex <= rightIndex) {
       const noPrefixStored = longestPrefix.prefix === null;
-      // const prefixStored = longestPrefix.prefix !== null;
       const leftPrefixValue = dataSet[leftIndex].prefix;
       const rightPrefixValue = dataSet[rightIndex].prefix;
       const phoneStartsWithLeft = phone_number.indexOf(dataSet[leftIndex].prefix.toString()) === 0;
@@ -65,18 +64,18 @@ const returnBear = async(req: Request, res: Response) => {
         }
       } else { // Update stored prefix with longest value
         if ( // Add value of left pointer to stored value
-            phoneStartsWithLeft
-            && longestPrefix.prefix === leftPrefixValue
-          ) {
-            longestPrefix.country = [dataSet[leftIndex].country, longestPrefix.country].join();
-            longestPrefix.operator = [dataSet[leftIndex].operator, longestPrefix.operator].join();
-            longestPrefix.region = [dataSet[leftIndex].region, longestPrefix.region].join();
-          } else if (
-            phoneStartsWithLeft // Store value of left pointer
-            && longestPrefix.prefix.toString().length < leftPrefixValue.toString().length
-          ) {
-            longestPrefix = dataSet[leftIndex]
-          }
+          phoneStartsWithLeft
+          && longestPrefix.prefix === leftPrefixValue
+        ) {
+          longestPrefix.country = [dataSet[leftIndex].country, longestPrefix.country].join();
+          longestPrefix.operator = [dataSet[leftIndex].operator, longestPrefix.operator].join();
+          longestPrefix.region = [dataSet[leftIndex].region, longestPrefix.region].join();
+        } else if (
+          phoneStartsWithLeft // Store value of left pointer
+          && longestPrefix.prefix.toString().length < leftPrefixValue.toString().length
+        ) {
+          longestPrefix = dataSet[leftIndex]
+        }
           
         if ( // Add value of right pointer to stored vlaue
           phoneStartsWithRight

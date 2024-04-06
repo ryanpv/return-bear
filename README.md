@@ -4,55 +4,39 @@
 
 The task here is to create a simple web app to look up a phone number of a text message. A set of data is provided in the JSON file. The web app must return an object from the dataset with the longest "prefix" that matches the beginning of the phone number. The message should be returned with any urls highlighted and clickable. 
 
-I use React Typescript for my frontend and Express Typescript for my backend. My solutions are below:
+I use React Typescript for my frontend and Express Typescript for my backend. Below will be instructions on how to run the tests/project, and a breakdown of my solution for this task.
 
-## Front-end
+## Scripts To Run
 
-For my front-end I created a simple form with two fields, an input for the phone number, and a textarea for the text message. Below the form, I created a div that will show the results. The displayed results are simply the "linkified" message and the object properties of the JSON data matched (prefix, operator, country, region). I left out any styling to focus more time on the solution. 
+### Front-end tests
+To run tests for the front-end, cd into the client directory and run `npm run coverage`. This will run tests and repeat if any changes occur.
 
-For the logic, I decided to separate the phone number and message into their own states. The phone number is sent to the backend, while the message is handled on the front end. The main reasoning for this is because the message itself will have nothing to do with the phone number matching. The message only needs to be returned with any and all URLs highlighted and clickable. My solution for this was to use the library react-linkify. It abstracts all the matching needed for URL prefixes and domain extensions. It also reduces the amount of data being sent back and forth between client-server. The message will be "linkified" as soon as its typed/pasted into the textarea.
+### Back-end tests
+To run tests for the back-end, cd into the server directory and run `npm run test`. This will also run tests and repeat them if any changes occur.
 
-The phone number gets sent to the backend for processing and if there are any matches, it will return an object with the longest prefix. The logic on the backend will be explained later, but in general it may return multiple matches. This is because the dataset includes different objects that share the same value for the prefix property, but the other properties have different values. For example:
-    {
-        "prefix": 1,
-        "operator": null,
-        "country_code": 1,
-        "country": "USA",
-        "region": null
-    },
-    {
-        "prefix": 1,
-        "operator": null,
-        "country_code": 1,
-        "country": "Canada",
-        "region": null
-    },
+## Run the project
+After cloning the repository, if you are running docker, simply cd into the project directory and you can run `docker-compose up`.
 
-My backend logic returns a single object, but with the different values concatenated to show all matches. As sometimes the result may include duplicate data (ie. { country: 'Canada', 'Canada' }), I cleaned up the results a bit to remove duplicates and any trailing commas/empty spaces. This was done by iterating through the values, creating a 'Set' for unique values, and then chaining some built-in array methods to remove the unecessary characters.
+Otherwise, you can first cd into both the client directory and server directory and run `npm install`. Then while in the client directory, run the react script `npm start`. In the server directory, run `npm run dev`. This will execute the concurrently library to allow nodemon to run with tsc to retranspile and restart the server code changes.
+
+## Solutions
+
+### Front-end
+
+For my solution, I have separated the handling of the messages and phone number. Messages will be parsed for URLs on the front-end using the library react-linkify. Although it would bring some overhead, this library is a straightforward and simplified solution that can detect URLs while easily being integrated with react components. It would reduce the amount of code needed to write for regEx matching. Additionally, handling messages on the front-end has more benefits, such as reducing server memory usage, processing, and network usage. Though messages can be small in size, dealing with a larger scale of requests can decrease performance. Furthermore, with security concerns in production environments, sending more form data to the back-end for processing would require additional code and library(ies) to validate and sanitize the data. Therefore, even more time and resources would be required. 
+
+Using regEx would be a valid solution as well when handling messages on the front-end. However, trying to match URLs with regEx alone introduces complexity resulting in more challenges to maintain the code. A good benefit for regEx usage would be more flexibility with its customization. If the task was looking to match specific URLs/prefixes/domains then regEx would be the better option. Though, as this task seeks to find all possible URLs, I believe react-linkify would be the better option.
 
 ### Testing (front-end)
 
-I added some simple testing to make sure the component renders and the expect results are returned. The first is a check for the form inputs to be in the document. The second test checks that with a valid phone number input, the correct response is returned. The third test returns a 400 status and checks if the error message is rendered.
+I added some simple testing to make sure the component renders and the expect results are returned. The first is a check for the form inputs to be in the document. The second test checks that with a valid phone number input, the correct response is returned. The third test returns a 400 status and checks if the error message is rendered when there is an error with the fetch function.
 
-## Back-end
+### Back-end
+The back-end required a bit more time and logic to produce. A simple solution would be to loop through the entire array dataset and return the object that had the longest matching prefix. Of course, also accounting for any duplicate prefix values. A simple solution of a single loop that offers a linear time complexity with less code for maintenance. To add a possible optimization to this solution could be sorting the dataset, iterating from longest prefix to shortest, and then exiting once there is a match. However, there would still be a chance for iterations needing to continue through the entire dataset. Thus, eliminating the benefit of improved speed.
 
-The back-end required a bit more time and logic. A simple solution would be to loop through the entire array dataset and return the object that had the longest matching prefix. If there were any objects that shared the same prefix value, the other property values would be concatenated. However, to improve performance I implemented the two pointer method to traverse the dataset array at the very first index (startIndex) and very last index (endIndex). This cuts the number of iterations in half, and therefore improving time complexity. An improved solution, but still a few conditions to consider. I have separated my if statements into three separate sections:
-* Currently stored object prefix value matches the object prefix value of the current iteration
-* Checking and replacing the currently stored prefix with a longer one if it exists
-* Setting the initial matched value (stored value/variable === null)
+To improve performance, at the trade-off of introducing slightly more code and complexity, I have implemented a two pointer approach. The benefit is that it is able to traverse the dataset with about half the amount of iterations, which means quicker execution of the task and also at linear time. With a smaller dataset there may not be a significant difference in performance. However, at scale this optimization should be more apparent than the former solution.
 
-Some of the if statements are in this specific order to avoid overwriting/skipping over values. I will explain them in a bit more detail.
-
-### Setting the initial matched value (stored value/variable === null)
-The first if statement section finds and stores the initial matched prefix value. The very first if statement in this section covers the edge case of the dataset not being sorted by prefix values. Should the startIndex prefix value and endIndex prefix value be the same during the same iteration, then the values will be concatenated with join(). The following if statements in the section would simply store whichever prefix value matches the phone number if they are not the same and continue the loop.
-
-### Currently stored object prefix value matches the object prefix value of the current iteration
-In this section, if a prefix value has already been stored and matches with either of the prefix values from both startIndex and endIndex of the iteration, the rest of the property values will be joined. Whether the startIndex prefix value is compared first or the endIndex is does not matter as this code block is not looking to replace any values. 
-
-### Checking and replacing the currently stored prefix with a longer one if it exists
-This section of if statements is fairly self-explanatory. It replaces the stored object with another object that has a longer prefix matching the phone number. The order of comparison for the startIndex prefix value or endIndex prefix value does not matter for this either. This targets the iterations where one prefix value is longer than the other and is also longer than the stored prefix value. If the iteration falls on two objects with the same prefix value that are longer than the stored prefix value, the above if statement section will catch it first. Hence why it is placed before this if statement section. Otherwise, any subsequent if statement can overwrite the values as they are executed synchronously.
-
-The loop completes once the start index value and end index value meet in the middle and the stored/initialized value is returned to the front-end. 
+As I mentioned earlier, more code and complexity for this task introduces more conditions to be considered. For the task to succeed, the solution needs to find a prefix match and replace it should a longer match is found. Since I found that the provided dataset included some duplicate prefix values from different locations, I also added consideration for those cases to avoid overwriting the result. The use of the two pointer approach requires the solution to also account for situations where both pointers have the same prefix value. This is to also avoid overwriting of results.
 
 ### Testing (back-end)
 
